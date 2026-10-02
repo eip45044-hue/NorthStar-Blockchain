@@ -2,7 +2,7 @@
 
 ## Railway API
 
-Deploy from the repository root so pnpm can see the workspace and lockfile. `railway.json` applies the declared Drizzle schema without `--force` before starting the API, builds the service, and checks `/api/healthz`; Railway supplies `PORT` at runtime. If Drizzle reports a destructive change, the deployment should stop for review rather than force it.
+Deploy from the repository root so pnpm can see the workspace and lockfile. The API creates only missing tables from its checked-in schema before listening; existing tables and data are not dropped, renamed, or rewritten. Railway supplies `PORT` at runtime.
 
 Set these Railway variables:
 
