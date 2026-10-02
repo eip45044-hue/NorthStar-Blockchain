@@ -12,6 +12,7 @@ Set these Railway variables:
 - `ADMIN_SECRET`: secret used by the admin panel login.
 - `MARKET_API_KEY`: optional CoinGecko API key; without it the public endpoint is used.
 - `PG_POOL_MAX`: optional PostgreSQL pool size; defaults to `10`.
+- The API creates any missing tables from its checked-in schema at startup. This is additive (`CREATE TABLE IF NOT EXISTS`) and does not alter existing tables or data.
 
 Do not commit production credentials. Existing profiles keep their stored verification status; approved KYC records are not reset during sign-in.
 
@@ -30,3 +31,7 @@ Add the deployed user app origin to Railway’s `CORS_ORIGINS`.
 Create a separate Vercel project for `artifacts/admin-panel`, using the repository root as its project root. Set the build command to `pnpm --filter @workspace/admin-panel build` and the output directory to `artifacts/admin-panel/dist/public`. Set `VITE_API_URL` to the same Railway API origin, then add the admin app’s exact deployment origin to Railway’s `CORS_ORIGINS`.
 
 For local development, both Vite servers default to ports `5173` and `5174` and proxy `/api` to `http://localhost:3000`. Set `VITE_API_URL` locally only when you want to use a remote API.
+
+## UptimeRobot
+
+The database-aware health endpoint is `https://norhstar-api.onrender.com/api/health`; `/api/healthz` is an alias. Both run `SELECT 1` and return HTTP 503 if PostgreSQL is unavailable. To create or reuse five-minute monitors for the API and canonical Netlify sites, run `node scripts/uptimerobot-setup.mjs --dry-run` first, then provide `UPTIMEROBOT_API_KEY` in your local shell and run `node scripts/uptimerobot-setup.mjs`. The script never prints the key. The custom domains require the registrar nameservers to be delegated to Netlify before monitoring them; the canonical `netlify.app` URLs are used by default.

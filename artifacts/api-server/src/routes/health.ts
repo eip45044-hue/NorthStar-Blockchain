@@ -4,7 +4,7 @@ import { HealthCheckResponse } from "@workspace/api-zod";
 
 const router: IRouter = Router();
 
-router.get("/healthz", async (req, res) => {
+router.get(["/health", "/healthz"], async (req, res) => {
   try {
     await pool.query("SELECT 1");
     const data = HealthCheckResponse.parse({ status: "ok" });
