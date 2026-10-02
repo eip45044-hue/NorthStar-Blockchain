@@ -1,0 +1,6 @@
+{
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm --filter @workspace/blockchain-hub build",
+  "outputDirectory": "artifacts/blockchain-hub/dist/public",
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+}
