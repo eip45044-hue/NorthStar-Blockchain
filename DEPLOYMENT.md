@@ -32,6 +32,10 @@ Create a separate Vercel project for `artifacts/admin-panel`, using the reposito
 
 For local development, both Vite servers default to ports `5173` and `5174` and proxy `/api` to `http://localhost:3000`. Set `VITE_API_URL` locally only when you want to use a remote API.
 
+## Existing Netlify Projects
+
+The existing Netlify projects must use the repository root as the base directory, not `zipFile` or the API URL. Set the user site build command to `pnpm install --frozen-lockfile && pnpm --filter @workspace/blockchain-hub build` and publish directory to `artifacts/blockchain-hub/dist/public`. Set the admin site build command to `pnpm install --frozen-lockfile && pnpm --filter @workspace/admin-panel build` and publish directory to `artifacts/admin-panel/dist/public`. Keep each site's existing `VITE_API_URL` set to the Railway API origin. The Netlify account currently reports build-credit exhaustion, so the production sites cannot publish until that limit is resolved.
+
 ## UptimeRobot
 
 The database-aware health endpoint is `https://norhstar-api.onrender.com/api/health`; `/api/healthz` is an alias. Both run `SELECT 1` and return HTTP 503 if PostgreSQL is unavailable. To create or reuse five-minute monitors for the API and canonical Netlify sites, run `node scripts/uptimerobot-setup.mjs --dry-run` first, then provide `UPTIMEROBOT_API_KEY` in your local shell and run `node scripts/uptimerobot-setup.mjs`. The script never prints the key. The custom domains require the registrar nameservers to be delegated to Netlify before monitoring them; the canonical `netlify.app` URLs are used by default.
